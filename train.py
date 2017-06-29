@@ -59,7 +59,7 @@ def train(data_type, seq_length, model, saved_model=None,
 
     # Get the model.
     rm = ResearchModels(len(data.classes), model, seq_length, saved_model)
-    
+    #import pdb;pdb.set_trace()
     # Fit!
     if load_to_memory:
         # Use standard fit.

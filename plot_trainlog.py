@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 def main(training_log):
     with open(training_log) as fin:
         reader = csv.reader(fin)
+        import pdb;pdb.set_trace()
         next(reader, None)  # skip the header
         accuracies = []
         top_5_accuracies = []
@@ -22,5 +23,5 @@ def main(training_log):
         plt.show()
 
 if __name__ == '__main__':
-    training_log = 'data/logs/mlp-training-1489455559.7089438.log'
+    training_log = './data/logs/events.out.tfevents.1498331329.ip-172-31-24-199'
     main(training_log)

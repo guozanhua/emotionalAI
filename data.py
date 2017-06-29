@@ -42,9 +42,24 @@ class DataSet():
                 if im2 in im:
                     imgsp= im.split('/')
                     datacsv.append((imgsp[1],imgsp[2],im2,self.seq_length))
+        #import pdb;pdb.set_trace()
+        if os.path.exists(self.sequence_path):
+            seq_list = glob(self.sequence_path+'/*')
+            if len(seq_list) != 0:
+                dd = 14+len(str(self.seq_length))
+                #import pdb; pdb.set_trace()
+                seq_name = [x.split('/')[3][:-dd] for x in seq_list]
+                datacsv2=[]
+                #print(len(datacsv))
+                for i,x in enumerate(datacsv):
+                    #print (i),
+                    if x[2] in seq_name:
+                        datacsv2.append(x)
+                #datacsv2 = [x for x in datacsv if x[2] in seq_name]
+                datacsv = datacsv2
         datacsv = list(set(datacsv))
         self.data = datacsv
-        print(self.data)
+        #print(self.data)
         #self.data = self.get_data()
 
         # Get the classes.
@@ -133,7 +148,7 @@ class DataSet():
             sequence = self.get_extracted_sequence(data_type, row)
 
             if sequence is None:
-                print("Can't find sequence. Did you generate them?")
+                print("Can't find sequence. Did you generate them?");continue 
                 # raise
             # else:
             #     import pdb; pdb.set_trace()
@@ -208,6 +223,7 @@ class DataSet():
             '-' + data_type + '.txt'
         if os.path.isfile(path):
             # Use a dataframe/read_csv for speed increase over numpy.
+            #import pdb;pdb.set_trace()
             features = pd.read_csv(path, sep=" ", header=None)
             return features.values
         else:
@@ -264,3 +280,4 @@ class DataSet():
             if i > nb_to_return - 1 or class_prediction[1] == 0.0:
                 break
             print("%s: %.2f" % (class_prediction[0], class_prediction[1]))
+

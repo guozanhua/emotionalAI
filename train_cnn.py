@@ -20,12 +20,13 @@ classes = ['Anger', 'Anticipation', 'Disgust', 'Fear', 'Joy', 'Sadness', 'Surpri
 
 # Helper: Save the model.
 checkpointer = ModelCheckpoint(
-    filepath='./data/checkpoints/inception.{epoch:03d}-{val_loss:.2f}.hdf5',
+    filepath='./data/checkpoints/inception-{epoch:03d}-{val_acc:.2f}.hdf5',
     verbose=1,
+    monitor='val_acc',
     save_best_only=True)
 
 # Helper: Stop when we stop learning.
-early_stopper = EarlyStopping(patience=10)
+early_stopper = EarlyStopping(patience=60)
 
 # Helper: TensorBoard
 tensorboard = TensorBoard(log_dir='./data/logs/')
@@ -129,9 +130,9 @@ def main(weights_file):
 
     # Get and train the mid layers.
     model = get_mid_layer_model(model)
-    model = train_model(model, 1000, generators,
+    model = train_model(model, 30, generators,
                         [checkpointer, early_stopper, tensorboard])
 
 if __name__ == '__main__':
-    weights_file = None
+    weights_file = './data/checkpoints/inception-023-0.42.hdf5'
     main(weights_file)

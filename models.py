@@ -43,6 +43,8 @@ class ResearchModels():
             self.model = load_model(self.saved_model)
         elif model == 'lstm':
             print("Loading LSTM model.")
+            self.seq_length = seq_length
+            self.features_length = features_length
             self.input_shape = (seq_length, features_length)
             self.model = self.lstm()
         elif model == 'crnn':
@@ -70,9 +72,12 @@ class ResearchModels():
         """Build a simple LSTM network. We pass the extracted features from
         our CNN to this model predomenently."""
         # Model.
+        from keras.layers.core import Reshape
         model = Sequential()
-        model.add(LSTM(2048, return_sequences=True, input_shape=self.input_shape,
-                       dropout=0.5))
+        #model.add(Reshape(self.input_shape+(1,),input_shape=self.input_shape))
+        #model.add(LSTM(2048, return_sequences=True, input_shape=self.input_shape,
+        #               dropout=0.5))
+        model.add(LSTM(output_dim = 2048, return_sequences=True,input_shape=self.input_shape,  input_dim = self.features_length,dropout=0.5))
         model.add(Flatten())
         model.add(Dense(512, activation='relu'))
         model.add(Dropout(0.5))
